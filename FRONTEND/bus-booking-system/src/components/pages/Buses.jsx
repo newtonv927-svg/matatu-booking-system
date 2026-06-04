@@ -1,4 +1,5 @@
-import { Link, useEffect, useState } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { busAPI } from "../../services/api";
 
