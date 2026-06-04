@@ -1,47 +1,19 @@
-function Register() {
-
+export default function Register() {
   return (
-
-    <div className="min-h-screen flex items-center justify-center">
-
-      <div className="bg-white p-10 rounded-3xl shadow-lg w-[400px]">
-
-        <h1 className="text-4xl font-bold mb-8 text-center">
-
+    <div className="min-h-screen flex justify-center items-center">
+      <form className="bg-white p-10 rounded-3xl shadow-xl">
+        <h1 className="text-3xl mb-4">
           Register
-
         </h1>
 
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="w-full border p-4 rounded-xl mb-4"
-        />
+        <input placeholder="Name" className="border p-3 w-full mb-4" />
+        <input placeholder="Email" className="border p-3 w-full mb-4" />
+        <input placeholder="Password" className="border p-3 w-full mb-4" />
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-4 rounded-xl mb-4"
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border p-4 rounded-xl mb-6"
-        />
-
-        <button className="w-full bg-blue-900 text-white py-3 rounded-xl">
-
+        <button className="bg-green-500 text-white px-8 py-3 rounded-xl">
           Create Account
-
         </button>
-
-      </div>
-
+      </form>
     </div>
-
   );
-
 }
-
-export default Register;

@@ -1,37 +1,33 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Payment(){
+export default function Payment() {
+  const navigate = useNavigate();
 
-  return(
+  const payNow = () => {
+    alert("Payment Successful");
+    navigate("/invoice");
+  };
 
-    <div className="p-10">
-
-      <div className="bg-white p-10 rounded-3xl shadow-lg max-w-xl">
-
-        <h1 className="text-4xl font-bold mb-8">
-          M-Pesa Payment
+  return (
+    <div className="min-h-screen flex justify-center items-center">
+      <div className="bg-white p-10 rounded-3xl shadow-xl w-[400px]">
+        <h1 className="text-3xl font-bold mb-6">
+          MPESA Payment
         </h1>
 
         <input
           type="text"
-          placeholder="Phone Number"
-          className="w-full border p-4 rounded-xl mb-6"
+          placeholder="2547XXXXXXXX"
+          className="w-full border p-3 rounded-xl mb-4"
         />
 
-        <Link to="/invoice">
-
-          <button className="bg-green-600 text-white px-8 py-3 rounded-xl">
-            Pay Now
-          </button>
-
-        </Link>
-
+        <button
+          onClick={payNow}
+          className="w-full bg-green-600 text-white p-3 rounded-xl"
+        >
+          Pay Now
+        </button>
       </div>
-
     </div>
-
-  )
-
+  );
 }
-
-export default Payment

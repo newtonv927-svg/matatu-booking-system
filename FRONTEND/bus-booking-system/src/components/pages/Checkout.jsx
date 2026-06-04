@@ -1,43 +1,48 @@
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
-function Checkout(){
+const Checkout = () => {
+  const location = useLocation();
 
-  return(
+  const seats = location.state?.seats || [];
+  const total = location.state?.total || 0;
 
-    <div className="max-w-4xl mx-auto px-6 py-16">
+  return (
+    <div className="min-h-screen flex justify-center items-center bg-gray-100">
+      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-lg">
 
-      <div className="bg-white p-10 rounded-3xl shadow-lg">
-
-        <h1 className="text-4xl font-bold mb-8">
+        <h1 className="text-3xl font-bold mb-4">
           Checkout
         </h1>
 
-        <input
-          type="text"
-          placeholder="Full Name"
-          className="w-full border p-4 rounded-xl mb-4"
-        />
+        <p className="mb-3">
+          Selected Seats:
+        </p>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-4 rounded-xl mb-4"
-        />
+        <div className="flex flex-wrap gap-2 mb-4">
+          {seats.map((seat) => (
+            <span
+              key={seat}
+              className="bg-blue-100 px-3 py-1 rounded-full"
+            >
+              {seat}
+            </span>
+          ))}
+        </div>
 
-        <Link to="/payment">
+        <h2 className="text-2xl font-bold text-green-600 mb-6">
+          KES {total}
+        </h2>
 
-          <button className="bg-blue-900 text-white px-8 py-3 rounded-xl">
-            Proceed To Payment
-          </button>
-
+        <Link
+          to="/payment"
+          className="block text-center bg-green-600 text-white py-3 rounded-lg hover:bg-green-700"
+        >
+          Proceed to Payment
         </Link>
 
       </div>
-
     </div>
+  );
+};
 
-  )
-
-}
-
-export default Checkout
+export default Checkout;

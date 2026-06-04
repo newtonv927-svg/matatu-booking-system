@@ -1,72 +1,34 @@
-import { useState } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 
-function Login(){
-
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
-
-  const loginUser = async()=>{
-
-    try{
-
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        {
-          email,
-          password
-        }
-      )
-
-      localStorage.setItem("token",res.data.token)
-
-      alert("Login Successful")
-
-    }catch(error){
-
-      console.log(error)
-
-    }
-
-  }
-
-  return(
-
-    <div className="min-h-screen flex items-center justify-center">
-
-      <div className="bg-white p-10 rounded-3xl shadow-lg w-[400px]">
-
-        <h1 className="text-4xl font-bold mb-8 text-center">
-          Login
-        </h1>
+export default function Login() {
+  return (
+    <div className="min-h-screen flex justify-center items-center">
+      <form className="bg-white p-10 rounded-3xl shadow-xl">
+        <h1 className="text-3xl mb-4">Login</h1>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full border p-4 rounded-xl mb-4"
-          onChange={(e)=>setEmail(e.target.value)}
+          className="border p-3 w-full mb-4"
         />
 
         <input
           type="password"
           placeholder="Password"
-          className="w-full border p-4 rounded-xl mb-6"
-          onChange={(e)=>setPassword(e.target.value)}
+          className="border p-3 w-full mb-4"
         />
 
-        <button
-          onClick={loginUser}
-          className="w-full bg-blue-900 text-white py-3 rounded-xl"
-        >
+        <button className="bg-blue-500 text-white px-8 py-3 rounded-xl">
           Login
         </button>
 
-      </div>
-
+        <Link
+          to="/register"
+          className="block mt-4"
+        >
+          Register
+        </Link>
+      </form>
     </div>
-
-  )
-
+  );
 }
-
-export default Login
