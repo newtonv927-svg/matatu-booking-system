@@ -26,51 +26,59 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
-      <form onSubmit={handleRegister} className="bg-white p-10 rounded-3xl shadow-xl">
-        <h1 className="text-3xl mb-4">
-          Register
-        </h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200">
+      <div className="max-w-4xl w-full mx-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <div className="hidden md:block bg-[url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop&s=3f1a9d6f5a3b2dd7a3f7e5b7c0e3f1b2')] bg-cover bg-center"></div>
 
-        <input 
-          placeholder="Name" 
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="border p-3 w-full mb-4" 
-        />
-        <input 
-          type="email"
-          placeholder="Email" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="border p-3 w-full mb-4" 
-        />
-        <input 
-          type="password"
-          placeholder="Password" 
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="border p-3 w-full mb-4" 
-        />
+          <form onSubmit={handleRegister} className="p-10 md:p-12">
+            <h1 className="text-2xl font-bold mb-2">Create an account</h1>
+            <p className="text-sm text-gray-500 mb-6">Sign up to book seats, manage trips and view invoices.</p>
 
-        <button 
-          type="submit"
-          disabled={loading}
-          className="bg-green-500 text-white px-8 py-3 rounded-xl hover:bg-green-600 disabled:opacity-50 w-full"
-        >
-          {loading ? "Creating Account..." : "Create Account"}
-        </button>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
+            <input 
+              placeholder="Jane Doe" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="mb-4 block w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" 
+            />
 
-        <Link
-          to="/login"
-          className="block mt-4 text-center text-blue-500 hover:underline"
-        >
-          Already have an account? Login
-        </Link>
-      </form>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input 
+              type="email"
+              placeholder="you@example.com" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mb-4 block w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" 
+            />
+
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input 
+              type="password"
+              placeholder="Create a password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mb-4 block w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" 
+            />
+
+            <button 
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow hover:bg-indigo-700 disabled:opacity-60"
+            >
+              {loading ? "Creating account..." : "Create account"}
+            </button>
+
+            <div className="mt-6 text-center text-sm">
+              <span className="text-gray-600">Already have an account?</span>
+              <Link to="/login" className="ml-2 text-indigo-600 font-medium">Log in</Link>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

@@ -27,43 +27,57 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
-      <form onSubmit={handleLogin} className="bg-white p-10 rounded-3xl shadow-xl">
-        <h1 className="text-3xl mb-4">Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200">
+      <div className="max-w-4xl w-full mx-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <div className="hidden md:block bg-[url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop&s=3f1a9d6f5a3b2dd7a3f7e5b7c0e3f1b2')] bg-cover bg-center"></div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="border p-3 w-full mb-4"
-        />
+          <form onSubmit={handleLogin} className="p-10 md:p-12">
+            <h1 className="text-2xl font-bold mb-2">Welcome back</h1>
+            <p className="text-sm text-gray-500 mb-6">Log in to manage bookings and view tickets.</p>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="border p-3 w-full mb-4"
-        />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mb-4 block w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            />
 
-        <button 
-          type="submit" 
-          disabled={loading}
-          className="bg-blue-500 text-white px-8 py-3 rounded-xl hover:bg-blue-600 disabled:opacity-50"
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mb-4 block w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            />
 
-        <Link
-          to="/register"
-          className="block mt-4 text-blue-500 hover:underline"
-        >
-          Register
-        </Link>
-      </form>
+            <div className="flex items-center justify-between mb-6">
+              <label className="inline-flex items-center gap-2 text-sm text-gray-600">
+                <input type="checkbox" className="form-checkbox h-4 w-4 text-indigo-600" /> Remember me
+              </label>
+              <Link to="/" className="text-sm text-indigo-600 hover:underline">Forgot?</Link>
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={loading}
+              className="w-full bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow hover:bg-indigo-700 disabled:opacity-60"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+
+            <div className="mt-6 text-center text-sm">
+              <span className="text-gray-600">Don’t have an account?</span>
+              <Link to="/register" className="ml-2 text-indigo-600 font-medium">Create one</Link>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
