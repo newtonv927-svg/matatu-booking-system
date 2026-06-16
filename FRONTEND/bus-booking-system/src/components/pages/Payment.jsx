@@ -1,16 +1,38 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 export default function Payment() {
   const navigate = useNavigate();
-
   const location = useLocation();
   const seats = location.state?.seats || [];
   const total = location.state?.total || 0;
   const bus = location.state?.bus;
 
+  const [passengerName, setPassengerName] = useState("");
+  const [phone, setPhone] = useState("");
+
   const payNow = () => {
-    alert("Payment Successful");
-    navigate("/invoice", { state: { seats, total, bus } });
+    if (!passengerName.trim()) {
+      alert("Please enter your full name");
+      return;
+    }
+    if (!phone.trim()) {
+      alert("Please enter your phone number");
+      return;
+    }
+
+    const paymentTime = new Date();
+
+    navigate("/invoice", {
+      state: {
+        seats,
+        total,
+        bus,
+        passengerName,
+        phone,
+        paymentTime,
+      },
+    });
   };
 
   return (
@@ -31,7 +53,17 @@ export default function Payment() {
 
         <input
           type="text"
+          placeholder="Full Name"
+          value={passengerName}
+          onChange={(e) => setPassengerName(e.target.value)}
+          className="w-full border border-slate-300 p-3 rounded-3xl mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+
+        <input
+          type="text"
           placeholder="2547XXXXXXXX"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
           className="w-full border border-slate-300 p-3 rounded-3xl mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
