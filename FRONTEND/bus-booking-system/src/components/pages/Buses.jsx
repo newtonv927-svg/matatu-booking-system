@@ -9,6 +9,7 @@ const placeholderImage = "https://images.unsplash.com/photo-1497493292307-31c376
 export default function Buses() {
   const [buses, setBuses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchBuses = async () => {
@@ -27,17 +28,43 @@ export default function Buses() {
     fetchBuses();
   }, []);
 
+  const filteredBuses = buses.filter((bus) => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) return true;
+    return [bus.name, bus.route, bus.type, bus.departure]
+      .filter(Boolean)
+      .some((value) => value.toLowerCase().includes(query));
+  });
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 min-h-screen">
-      <h1 className="text-4xl font-bold text-center mb-10">
+      <h1 className="text-4xl font-bold text-center mb-6">
         Available Buses
       </h1>
+
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-slate-500">Search by bus name, route, type or departure.</p>
+        <div className="flex w-full max-w-md items-center gap-2 rounded-3xl border border-slate-300 bg-white px-4 py-3 shadow-sm sm:w-auto">
+          <span className="text-slate-400">🔍</span>
+          <input
+            type="search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search buses..."
+            className="w-full border-0 bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none"
+          />
+        </div>
+      </div>
 
       {loading ? (
         <div className="text-center text-xl">Loading buses...</div>
       ) : buses.length === 0 ? (
         <div className="text-center text-xl text-gray-500">
           No buses available at the moment
+        </div>
+      ) : filteredBuses.length === 0 ? (
+        <div className="text-center text-xl text-gray-500">
+          No buses match your search.
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
