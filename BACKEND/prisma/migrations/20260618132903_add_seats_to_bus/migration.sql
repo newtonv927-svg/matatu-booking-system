@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `bus` ADD COLUMN `availableSeats` INTEGER NOT NULL DEFAULT 40,
+    ADD COLUMN `totalSeats` INTEGER NOT NULL DEFAULT 40;

@@ -59,6 +59,8 @@ const Seats = () => {
     });
   };
 
+  const availableSeats = bus?.availableSeats ?? (40 - bookedSeats.length);
+
   return (
     <div className="min-h-screen bg-slate-100 py-10 px-4">
       <div className="max-w-6xl mx-auto">
@@ -74,6 +76,8 @@ const Seats = () => {
               <p className="text-lg font-semibold text-slate-900">{bus?.route || "Loading..."}</p>
               <p className="text-sm text-slate-500 mt-2">Fare per seat</p>
               <p className="text-xl font-semibold text-indigo-600">KES {bus?.fare || bus?.price || 1500}</p>
+              <p className="text-sm text-slate-500 mt-2">Seats left</p>
+              <p className="text-lg font-semibold text-green-600">{availableSeats} seats</p>
             </div>
           </div>
         </div>

@@ -25,19 +25,23 @@ model User {
 
 model Bus {
 
-  id          Int       @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
 
-  name        String
+  name            String
 
-  route       String
+  route           String
 
-  departure   String
+  departure       String
 
-  price       Float
+  price           Float
 
-  image       String?
+  image           String?
 
-  bookings    Booking[]
+  totalSeats      Int       @default(40)
+
+  availableSeats  Int       @default(40)
+
+  bookings        Booking[]
 
 }
 
