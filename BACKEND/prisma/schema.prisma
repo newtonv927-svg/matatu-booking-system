@@ -35,6 +35,8 @@ model Bus {
 
   price       Float
 
+  image       String?
+
   bookings    Booking[]
 
 }

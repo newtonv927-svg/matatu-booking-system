@@ -1,7 +1,11 @@
 import { useLocation, Link } from "react-router-dom";
+import { useCallback, useRef } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function Invoice() {
   const location = useLocation();
+  const receiptRef = useRef(null);
   const {
     seats = [],
     total = 0,
@@ -33,6 +37,38 @@ export default function Invoice() {
   const paymentDateTime = formatDateTime(paymentTime);
   const departureTime = bus?.departure || "N/A";
 
+  const downloadReceipt = useCallback(async () => {
+    if (!receiptRef.current) return;
+
+    const element = receiptRef.current;
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pageWidth - 40;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let position = 20;
+
+    pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+    if (imgHeight > pageHeight - 40) {
+      const totalPages = Math.ceil(imgHeight / (pageHeight - 40));
+      for (let page = 1; page < totalPages; page += 1) {
+        pdf.addPage();
+        position -= pageHeight - 40;
+        pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+      }
+    }
+
+    pdf.save(`receipt-${receiptNumber}.pdf`);
+  }, [receiptNumber]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-10 px-4">
       <div className="max-w-2xl mx-auto">
@@ -46,7 +82,7 @@ export default function Invoice() {
           </div>
 
           {/* Receipt Content */}
-          <div className="p-8">
+          <div className="p-8" ref={receiptRef}>
             {/* Receipt Header */}
             <div className="border-b border-slate-200 pb-6 mb-6">
               <div className="flex justify-between items-start">
@@ -175,8 +211,11 @@ export default function Invoice() {
 
             {/* Action Buttons */}
             <div className="flex gap-3 mt-8">
-              <button className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition">
-                Print Receipt
+              <button
+                onClick={downloadReceipt}
+                className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"
+              >
+                Download Receipt
               </button>
               <Link
                 to="/buses"
