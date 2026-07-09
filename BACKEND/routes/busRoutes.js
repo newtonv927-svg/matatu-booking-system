@@ -4,12 +4,15 @@ const router = express.Router();
 
 const {
 
-  getBuses
+  getBuses,
+  getBusById
 
 } = require("../controllers/busController");
 
 
 router.get("/",getBuses);
+
+router.get("/:id", getBusById);
 
 
 module.exports = router;

@@ -121,7 +121,7 @@ export default function Buses() {
 
                 <Link
                   to={`/bus/${bus.id}`}
-                  className="mt-6 inline-flex w-full items-center justify-center rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5"
+                  className="mt-6 inline-flex w-full items-center justify-center rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-200 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
                 >
                   View Details
                 </Link>

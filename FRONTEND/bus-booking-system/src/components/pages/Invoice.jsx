@@ -1,6 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import { useCallback, useRef } from "react";
-import html2canvas from "html2canvas";
+import { useRef } from "react";
 import jsPDF from "jspdf";
 
 export default function Invoice() {
@@ -37,37 +36,92 @@ export default function Invoice() {
   const paymentDateTime = formatDateTime(paymentTime);
   const departureTime = bus?.departure || "N/A";
 
-  const downloadReceipt = useCallback(async () => {
-    if (!receiptRef.current) return;
+  const downloadReceipt = async () => {
+    try {
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      let yPosition = 15;
+      const lineHeight = 8;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 15;
+      const maxWidth = pdf.internal.pageSize.getWidth() - 2 * margin;
 
-    const element = receiptRef.current;
-    const canvas = await html2canvas(element, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#ffffff",
-    });
+      // Helper function to add text and handle page breaks
+      const addText = (text, fontSize, fontStyle = "normal", x = margin) => {
+        pdf.setFontSize(fontSize);
+        pdf.setFont(undefined, fontStyle);
+        pdf.text(text, x, yPosition, { maxWidth: maxWidth - x + margin });
+        yPosition += lineHeight;
+        if (yPosition > pageHeight - 15) {
+          pdf.addPage();
+          yPosition = 15;
+        }
+      };
 
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
+      // Title
+      pdf.setFont(undefined, "bold");
+      addText("BOOKING RECEIPT", 18);
+      addText(`Receipt #: ${receiptNumber}`, 12);
+      yPosition += 5;
 
-    const imgWidth = pageWidth - 40;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let position = 20;
+      // Passenger Information
+      pdf.setFont(undefined, "bold");
+      addText("PASSENGER INFORMATION", 12);
+      pdf.setFont(undefined, "normal");
+      addText(`Name: ${passengerName}`, 11);
+      addText(`Phone: ${phone}`, 11);
+      yPosition += 3;
 
-    pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
-    if (imgHeight > pageHeight - 40) {
-      const totalPages = Math.ceil(imgHeight / (pageHeight - 40));
-      for (let page = 1; page < totalPages; page += 1) {
-        pdf.addPage();
-        position -= pageHeight - 40;
-        pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
-      }
+      // Journey Details
+      pdf.setFont(undefined, "bold");
+      addText("JOURNEY DETAILS", 12);
+      pdf.setFont(undefined, "normal");
+      addText(`Bus: ${bus?.name || "N/A"}`, 11);
+      addText(`Type: ${bus?.type || "N/A"}`, 11);
+      addText(`Route: ${bus?.route || "N/A"}`, 11);
+      addText(`Departure: ${departureTime}`, 11);
+      yPosition += 3;
+
+      // Seats
+      pdf.setFont(undefined, "bold");
+      addText("SELECTED SEATS", 12);
+      pdf.setFont(undefined, "normal");
+      addText(seats.length > 0 ? `Seats: ${seats.join(", ")}` : "No seats selected", 11);
+      yPosition += 3;
+
+      // Payment Details
+      pdf.setFont(undefined, "bold");
+      addText("PAYMENT DETAILS", 12);
+      pdf.setFont(undefined, "normal");
+      addText(`Number of Seats: ${seats.length}`, 11);
+      addText(`Fare per Seat: KES ${bus?.fare ? bus.fare.toLocaleString() : "0"}`, 11);
+      addText(`Payment Status: PAID`, 11);
+      addText(`Payment Method: M-Pesa`, 11);
+      yPosition += 3;
+
+      // Total Amount
+      pdf.setFont(undefined, "bold");
+      pdf.setFontSize(14);
+      addText(`TOTAL AMOUNT: KES ${total.toLocaleString()}`, 14);
+      yPosition += 5;
+
+      // Date and Time
+      pdf.setFont(undefined, "normal");
+      pdf.setFontSize(10);
+      addText(`Booking Date & Time: ${paymentDateTime}`, 10);
+      yPosition += 5;
+
+      // Footer
+      pdf.setFont(undefined, "italic");
+      pdf.setFontSize(9);
+      addText("Please arrive 30 minutes before departure.", 9);
+      addText(`Confirmation SMS sent to: ${phone}`, 9);
+
+      pdf.save(`receipt-${receiptNumber}.pdf`);
+    } catch (error) {
+      console.error("Error downloading receipt:", error);
+      alert("Failed to download receipt. Error: " + error.message);
     }
-
-    pdf.save(`receipt-${receiptNumber}.pdf`);
-  }, [receiptNumber]);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-10 px-4">
@@ -208,22 +262,22 @@ export default function Invoice() {
                 A confirmation SMS has been sent to {phone}
               </p>
             </div>
+          </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 mt-8">
-              <button
-                onClick={downloadReceipt}
-                className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"
-              >
-                Download Receipt
-              </button>
-              <Link
-                to="/buses"
-                className="flex-1 bg-slate-200 text-slate-900 py-3 rounded-xl font-semibold hover:bg-slate-300 transition text-center"
-              >
-                Book Another Trip
-              </Link>
-            </div>
+          {/* Action Buttons - Outside Receipt Content */}
+          <div className="flex gap-3 p-8 border-t border-slate-200 bg-slate-50">
+            <button
+              onClick={downloadReceipt}
+              className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition cursor-pointer"
+            >
+              Download Receipt
+            </button>
+            <Link
+              to="/buses"
+              className="flex-1 bg-slate-200 text-slate-900 py-3 rounded-xl font-semibold hover:bg-slate-300 transition text-center"
+            >
+              Book Another Trip
+            </Link>
           </div>
         </div>
       </div>
