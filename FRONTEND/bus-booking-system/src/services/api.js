@@ -9,6 +9,11 @@ const api = axios.create({
   },
 });
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: token } : {};
+};
+
 // Auth API calls
 export const authAPI = {
   register: (data) => api.post('/auth/register', data),
@@ -23,8 +28,13 @@ export const busAPI = {
 
 // Booking API calls
 export const bookingAPI = {
-  createBooking: (data) => api.post('/bookings', data),
-  getUserBookings: (userId) => api.get(`/bookings/${userId}`),
+  createBooking: (data) => api.post('/bookings', data, { headers: getAuthHeaders() }),
+  getUserBookings: (userId) => api.get(`/bookings/${userId}`, { headers: getAuthHeaders() }),
+};
+
+// Admin API calls
+export const adminAPI = {
+  getOverview: () => api.get('/admin/overview', { headers: getAuthHeaders() }),
 };
 
 export default api;

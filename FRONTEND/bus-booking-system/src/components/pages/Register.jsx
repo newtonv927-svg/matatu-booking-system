@@ -37,6 +37,7 @@ export default function Register() {
 
             <label className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
             <input 
+              type="text"
               placeholder="Jane Doe" 
               value={name}
               onChange={(e) => setName(e.target.value)}

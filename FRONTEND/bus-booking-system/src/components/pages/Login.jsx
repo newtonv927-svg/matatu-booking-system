@@ -1,13 +1,28 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { authAPI } from "../../services/api";
+
+const getSavedUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    return null;
+  }
+};
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = getSavedUser();
+    if (user) {
+      navigate(user.role === "admin" ? "/admin-dashboard" : "/dashboard");
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,7 +33,8 @@ export default function Login() {
       toast.success("Login successful!");
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      navigate("/dashboard");
+      const redirectPath = response.data.user?.role === "admin" ? "/admin-dashboard" : "/dashboard";
+      navigate(redirectPath);
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     } finally {
