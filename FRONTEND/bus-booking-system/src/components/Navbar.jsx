@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const getCurrentUser = () => {
@@ -12,13 +12,9 @@ const getCurrentUser = () => {
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [user, setUser] = useState(getCurrentUser());
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    setUser(getCurrentUser());
-  }, [location]);
+  const user = useMemo(() => getCurrentUser(), [location.pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
