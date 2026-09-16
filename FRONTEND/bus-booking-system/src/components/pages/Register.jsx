@@ -12,6 +12,7 @@ export default function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
 
     try {
@@ -62,7 +63,7 @@ export default function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mb-4 block w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" 
+              className="mb-4 block w-full rounded-xl border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
             />
 
             <button 

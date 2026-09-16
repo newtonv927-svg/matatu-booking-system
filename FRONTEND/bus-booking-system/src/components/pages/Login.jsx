@@ -11,6 +11,10 @@ const getSavedUser = () => {
   }
 };
 
+const getDashboardPath = (user) => (
+  user?.role === "admin" ? "/admin-dashboard" : "/passenger-dashboard"
+);
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +24,7 @@ export default function Login() {
   useEffect(() => {
     const user = getSavedUser();
     if (user) {
-      navigate(user.role === "admin" ? "/admin-dashboard" : "/dashboard");
+      navigate(getDashboardPath(user), { replace: true });
     }
   }, [navigate]);
 
@@ -33,8 +37,7 @@ export default function Login() {
       toast.success("Login successful!");
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      const redirectPath = response.data.user?.role === "admin" ? "/admin-dashboard" : "/dashboard";
-      navigate(redirectPath);
+      navigate(getDashboardPath(response.data.user), { replace: true });
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     } finally {

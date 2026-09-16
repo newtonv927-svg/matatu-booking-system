@@ -18,6 +18,12 @@ Create a `.env` file in the BACKEND folder:
 ```
 DATABASE_URL="mysql://root:password@localhost:3306/bus_booking_system"
 JWT_SECRET=your_secret_key_here
+FRONTEND_URL=http://localhost:3000
+
+# Optional: provision an admin when running the seed command.
+ADMIN_NAME=System Admin
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=replace_with_a_strong_password
 ```
 
 ### 3. Setup Database
@@ -31,6 +37,8 @@ npx prisma migrate dev --name init
 # (Optional) Seed database with sample data
 npx prisma db seed
 ```
+
+The seed command creates or updates the admin only when all three `ADMIN_*` variables are set. The password is hashed before it is stored. Do not commit these values.
 
 ### 4. Start Backend Server
 ```bash
@@ -109,7 +117,7 @@ Frontend will run on `http://localhost:3000`
 - Check database credentials in .env
 
 ### CORS Issues
-- CORS is enabled in backend - if issues persist, check backend server.js configuration
+- CORS is enabled for `FRONTEND_URL` and local Vite development origins. If issues persist, confirm `FRONTEND_URL` matches the browser origin exactly.
 
 ## Deployment
 

@@ -43,7 +43,7 @@ function App() {
         <Route
           path="/passenger-dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="passenger">
               <PassengerDashboard />
             </ProtectedRoute>
           }

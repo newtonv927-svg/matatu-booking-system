@@ -2,6 +2,8 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+const bcrypt = require("bcryptjs");
+
 async function main() {
   console.log("Seeding database with sample buses...");
 
@@ -70,6 +72,28 @@ async function main() {
     await prisma.bus.create({
       data: bus,
     });
+  }
+
+  const { ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME } = process.env;
+  if (ADMIN_EMAIL && ADMIN_PASSWORD && ADMIN_NAME) {
+    const password = await bcrypt.hash(ADMIN_PASSWORD, 10);
+    await prisma.user.upsert({
+      where: { email: ADMIN_EMAIL.toLowerCase().trim() },
+      update: {
+        name: ADMIN_NAME.trim(),
+        password,
+        role: "admin",
+      },
+      create: {
+        name: ADMIN_NAME.trim(),
+        email: ADMIN_EMAIL.toLowerCase().trim(),
+        password,
+        role: "admin",
+      },
+    });
+    console.log(`Admin account provisioned for ${ADMIN_EMAIL.toLowerCase().trim()}`);
+  } else {
+    console.log("Admin account not provisioned: set ADMIN_NAME, ADMIN_EMAIL, and ADMIN_PASSWORD to create one.");
   }
 
   console.log("Database seeded with 6 buses!");

@@ -12,6 +12,7 @@ exports.register = async (req, res) => {
     const name = req.body.name?.trim();
     const email = req.body.email?.toLowerCase().trim();
     const password = req.body.password;
+    const role = "passenger";
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -35,6 +36,7 @@ exports.register = async (req, res) => {
         name,
         email,
         password: hashedPassword,
+        role,
       },
     });
 

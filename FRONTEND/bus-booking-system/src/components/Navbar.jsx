@@ -67,7 +67,10 @@ function Navbar() {
                 </Link>
               </li>
               <li>
-                <Link to="/dashboard" className="hover:text-white transition duration-300">
+                <Link
+                  to={user?.role === "admin" ? "/admin-dashboard" : "/passenger-dashboard"}
+                  className="hover:text-white transition duration-300"
+                >
                   Dashboard
                 </Link>
               </li>
@@ -136,7 +139,11 @@ function Navbar() {
               </Link>
             </li>
             <li>
-              <Link to="/dashboard" className="block hover:text-white transition duration-300" onClick={() => setMobileOpen(false)}>
+              <Link
+                to={user?.role === "admin" ? "/admin-dashboard" : "/passenger-dashboard"}
+                className="block hover:text-white transition duration-300"
+                onClick={() => setMobileOpen(false)}
+              >
                 Dashboard
               </Link>
             </li>
